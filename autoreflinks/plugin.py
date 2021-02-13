@@ -18,12 +18,14 @@ class AutoRefLinks(BasePlugin):
 
     def get_heading_url(self, heading):
         for page, markdown in self.pages:
+            page_url = page.abs_url or '/' + page.url
+
             if heading == page.title:
-                return '/' + page.url
+                return page_url
             h_regex = ' *{} *'.format(re.escape(heading))
             regex = re.compile('^{0}$\n^[=-]+$|^#+{0}$'.format(h_regex), re.M)
             if re.search(regex, markdown):
-                return '/' + page.url + '#' + slugify(heading, '-')
+                return page_url + '#' + slugify(heading, '-')
 
     def on_page_content(self, html, **kwargs):
 
